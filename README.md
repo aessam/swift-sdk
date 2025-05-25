@@ -40,6 +40,22 @@ Then add the dependency to your target:
 )
 ```
 
+### MCP Server Tester
+
+The package includes an executable target named `MCPServerTester` that provides a user-friendly SwiftUI interface for testing MCP servers:
+
+```
+swift run MCPServerTester
+```
+
+This tool allows you to:
+- Connect to MCP servers using different transports (HTTP, Network, Stdio)
+- View server information and capabilities
+- Test tools, resources, and prompts
+- Configure server connection parameters
+
+The application requires macOS 13.0 or higher.
+
 ## Client Usage
 
 The client component allows your application to connect to MCP servers.

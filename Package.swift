@@ -20,6 +20,10 @@ var targetDependencies: [Target.Dependency] = [
     dependencies.append(
         .package(url: "https://github.com/loopwork-ai/eventsource.git", from: "1.1.0"))
     targetDependencies.append(.product(name: "EventSource", package: "eventsource"))
+
+    // SwiftUI is only available on Apple platforms
+    dependencies.append(
+        .package(url: "https://github.com/apple/swift-collections.git", from: "1.0.0"))
 #endif
 
 let package = Package(
@@ -36,7 +40,10 @@ let package = Package(
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "MCP",
-            targets: ["MCP"])
+            targets: ["MCP"]),
+        .executable(
+            name: "MCPServerTester",
+            targets: ["MCPServerTester"])
     ],
     dependencies: dependencies,
     targets: [
@@ -48,5 +55,17 @@ let package = Package(
         .testTarget(
             name: "MCPTests",
             dependencies: ["MCP"] + targetDependencies),
+        #if !os(Linux)
+        .executableTarget(
+            name: "MCPServerTester",
+            dependencies: [
+                "MCP",
+                .product(name: "Collections", package: "swift-collections")
+            ],
+            swiftSettings: [
+                .define("ENABLE_PREVIEWS", .when(configuration: .debug))
+            ]
+        ),
+        #endif
     ]
 )
